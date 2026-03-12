@@ -1,0 +1,152 @@
+/* Alap reset */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: url("../images/HeaderPic.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+}
+
+/* Header */
+.header {
+  width: 100%;
+  height: 25vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  text-align: center;
+  padding: 20px 0;
+  position: relative;
+}
+
+/* Header szöveg */
+.header-content h1 {
+  font-style: italic;
+  font-size: 3vw;
+  margin: 0;
+  color: gold;
+}
+
+/* Hamburger ikon */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10; /* biztos, hogy a menü fölött legyen */
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  background: gold;
+  border-radius: 2px;
+}
+
+/* Menü alapértelmezett */
+.header-menu {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 5vh;
+}
+
+.header-menu a {
+  color: gold;
+  text-decoration: none;
+  padding: 1vh 2vh;
+  position: relative;
+  vertical-align: middle;
+}
+.header input {
+  display: none;
+}
+/* Elválasztók */
+.header-menu a:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 60%;
+  background: gold;
+}
+
+.header-menu a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.footer {
+  margin-top: auto;
+  color: gold;
+  display: flex;
+  width: 100%;
+  text-align: center;
+}
+.footer p {
+  width: 100%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center; /* szöveg középre függőlegesen */
+  align-items: center;
+  font-size: 1.5vw;
+}
+
+/* Mobil reszponzív */
+@media (max-width: 768px) {
+  .header {
+    height: auto; /* dinamikus magasság */
+    padding: 20px 0;
+  }
+
+  .header-content h1 {
+    font-size: 3.5vw;
+  }
+
+  /* Hamburger megjelenítése */
+  .hamburger {
+    display: flex;
+  }
+
+  /* Menü alapból rejtve mobilon */
+  .header-menu {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* Checkbox segítségével jelenik meg a menü */
+  #menu-toggle:checked + .hamburger + .header-menu {
+    display: flex;
+  }
+
+  .header-menu a {
+    padding: 10px 0;
+    width: 80%; /* szélesség a mobilon */
+    text-align: center;
+    font-size: 3vw;
+  }
+  .footer p {
+    font-size: 3vw;
+  }
+
+  /* Elválasztó vonalak eltüntetése mobilon */
+  .header-menu a:not(:last-child)::after {
+    display: none;
+  }
+}
