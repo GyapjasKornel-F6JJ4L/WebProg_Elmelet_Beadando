@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="hu">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web alkalmazás - React SPA</title>
+    <link rel="stylesheet" href="css/indexStyle.css" />
+    <!-- Fő stíluslap az oldal megjelenéséhez -->
+    <link rel="stylesheet" href="css/javascriptStyle.css" />
+    <!-- Specifikus stílusok az űrlap elemekhez -->
+  </head>
+
+  <body>
+    <header class="header">
+      <!-- Navigációs fejléc reszponzív menüvel -->
+      <div class="header-content">
+        <h1>Web-programozás I Előadás Házi feladat</h1>
+      </div>
+      <input type="checkbox" id="menu-toggle" class="checkbox" />
+      <label for="menu-toggle" class="hamburger">
+        <!-- Hamburger menü ikon mobil nézethez -->
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+      <nav class="header-menu">
+        <!-- Oldalak közötti navigációs menü -->
+        <a href="index.html">Főoldal</a>
+        <a href="javascript.html">JavaScript Menü</a>
+        <a href="react.html">React menü</a>
+        <a href="spa.html">SPA menü</a>
+        <a href="api.html">Fetch API menü</a>
+        <a href="axios.html">Axios menü</a>
+        <a href="oojs.html">OOJS menü</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Fő tartalom terület a React alkalmazások számára -->
+      <h2>React SPA Mini Projektek</h2>
+
+      <div class="form-container" style="max-width: 900px; margin: auto;">
+        <!-- Konténer az alkalmazás választó elemekhez -->
+        <h3>Alkalmazások kiválasztása</h3>
+        <nav style="display: block; margin-bottom: 20px; text-align: center;
+        gap: 10px; word-spacing: 30px; border-radius: 30px;">
+          <!-- Alkalmazás választó gombok navigációja -->
+          <button onclick="loadApp('rock')" class="btn btn-primary">
+            Kő–Papír–Olló
+          </button>
+          <button onclick="loadApp('guess')" class="btn btn-primary">
+            Számkitaláló
+          </button>
+        </nav>
+        <br>
+
+        <iframe id="appFrame" title="React App" style="max-width: 100%; width: 100%; height: 500px; border-radius: 20px;"></iframe>
+        <!-- React alkalmazások megjelenítése iframe-ben -->
+      </div>
+    </main>
+    <footer class="footer">
+      <!-- Oldal lábléc fejlesztők neveivel -->
+      <p>Gyapjas Kornél (F6JJ4L)</p>
+      <p>Ember Richárd (MLY59O)</p>
+    </footer>
+
+    <!-- JavaScript funkciók az SPA működéséhez -->
+    <script>
+      // Alkalmazás betöltő függvény
+      // Paraméter: app - 'rock' vagy 'guess'
+      function loadApp(app) {
+        // Alkalmazások betöltése az iframe-be
+        const frame = document.getElementById("appFrame");
+
+        if (app === "rock") {
+          frame.src = "react/rock-paper-scissors/dist/index.html";
+        } else {
+          frame.src = "react/number-guess/dist/index.html";
+        }
+      }
+    </script>
+  </body>
+</html>
