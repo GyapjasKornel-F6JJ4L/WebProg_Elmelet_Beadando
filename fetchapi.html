@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="hu">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web alkalmazás</title>
+  <link rel="stylesheet" href="css/indexStyle.css" />
+  <link rel="stylesheet" href="css/javascriptStyle.css" />
+</head>
+
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Web-programozás I Előadás Házi feladat</h1>
+    </div>
+    <!-- Rejtett checkbox trükk a mobil menühöz (CSS-ből vezérelve) -->
+    <input type="checkbox" id="menu-toggle" class="checkbox" />
+    <label for="menu-toggle" class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+    <nav class="header-menu">
+      <a href="index.html">Főoldal</a>
+      <a href="javascript.html">JavaScript Menű</a>
+      <a href="react.html">React menü</a>
+      <a href="spa.html">SPA menü</a>
+      <a href="fetchapi.html">Fetch API menü</a>
+      <a href="axios.html">Axios menü</a>
+      <a href="oojs.html">OOJS menü</a>
+    </nav>
+  </header>
+
+<main>
+<h2>Szoftverleltár (Fetch API, MySQL Adatbázis)</h2>
+
+<p id="error-message" style="color: red; font-weight: bold; display: none;"></p>
+
+<div class="form-container">
+  <h3 id="form-title">Új szoftver hozzáadása</h3>
+  <form id="software-form">
+    <div class="form-group">
+      <label for="nev">Név / Szoftver:</label>
+      <input type="text" id="nev" required>
+    </div>
+    <div class="form-group">
+      <label for="kategoria">Kategória:</label>
+      <input type="text" id="kategoria" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Mentés</button>
+    <button type="button" id="cancel-btn" class="btn btn-secondary" style="display:none;">Mégse</button>
+  </form>
+</div>
+
+<div id="loading" style="display: none;">Adatok töltése folyamatban...</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 10%">ID</th>
+      <th style="width: 35%">Név</th>
+      <th style="width: 25%">Kategória</th>
+      <th style="width: 30%">Műveletek</th>
+    </tr>
+  </thead>
+  <tbody id="table-body">
+    <!-- Adatok ide kerülnek dinamikusan -->
+  </tbody>
+</table>
+
+<script>
+// Az éppen szerkesztett elem ID-ját tárolja
+let editingId = null;
+
+// ================= READ =================
+function loadSoftware() {
+  const loading = document.getElementById("loading");
+  const errorMsg = document.getElementById("error-message");
+  
+  loading.style.display = "block";
+  errorMsg.style.display = "none";
+
+  fetch("php/api.php")
+    .then(res => {
+      if (!res.ok) throw new Error('Hálózati hiba: ' + res.status);
+      return res.json();
+    })
+    .then(data => {
+      const tbody = document.getElementById("table-body");
+      tbody.innerHTML = "";
+
+      if (data.length > 0) {
+        data.forEach(software => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${software.id}</td>
+            <td>${software.nev}</td>
+            <td>${software.kategoria}</td>
+            <td class="actions">
+              <button class="btn btn-warning" onclick="editSoftware(${software.id}, '${software.nev}', '${software.kategoria}')">Szerkesztés</button>
+              <button class="btn btn-danger" onclick="deleteSoftware(${software.id})">Törlés</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Nincs elérhető adat az adatbázisban.</td></tr>';
+      }
+    })
+    .catch(err => {
+      console.error('Hiba az adatok betöltésekor:', err);
+      errorMsg.textContent = 'Hiba történt az adatok betöltésekor: ' + err.message;
+      errorMsg.style.display = "block";
+    })
+    .finally(() => {
+      loading.style.display = "none";
+    });
+}
+
+// ================= CREATE / UPDATE =================
+document.getElementById("software-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const nev = document.getElementById("nev").value;
+  const kategoria = document.getElementById("kategoria").value;
+
+  if (!nev || !kategoria) { 
+    alert('Kérjük töltsön ki minden kötelező mezőt!');
+    return;
+  }
+
+  const data = editingId ? { id: editingId, nev, kategoria } : { nev, kategoria };
+  const method = editingId ? "PUT" : "POST";
+
+  fetch("php/api.php", {
+    method: method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(res => {
+    if (!res.ok) throw new Error('Hálózati hiba: ' + res.status);
+    return res.json();
+  })
+  .then(() => {
+    resetForm();
+    loadSoftware();
+  })
+  .catch(err => {
+    console.error('Hiba a mentés során:', err);
+    alert('Hiba történt az adatmentés során!');
+  });
+});
+
+// ================= DELETE =================
+function deleteSoftware(id) {
+  if (window.confirm(`Biztosan törölni szeretné a(z) ${id} azonosítójú szoftvert?`)) {
+    fetch(`php/api.php?id=${id}`, { method: "DELETE" })
+    .then(res => {
+      if (!res.ok) throw new Error('Hálózati hiba: ' + res.status);
+      return res.json();
+    })
+    .then(() => loadSoftware())
+    .catch(err => {
+      console.error('Hiba a törlés során:', err);
+      alert('Hiba történt a törlés során!');
+    });
+  }
+}
+
+// ================= EDIT =================
+function editSoftware(id, nev, kategoria) {
+  editingId = id;
+  document.getElementById("nev").value = nev;
+  document.getElementById("kategoria").value = kategoria;
+  
+  document.getElementById("form-title").textContent = `Szoftver szerkesztése (ID: ${id})`; 
+  document.getElementById("cancel-btn").style.display = "inline-block"; 
+  
+  // UX extra: odagörget a form-hoz
+  window.scrollTo({ top: 0, behavior: 'smooth' }); 
+}
+
+// ================= CANCEL =================
+document.getElementById("cancel-btn").addEventListener("click", resetForm);
+
+function resetForm() {
+  editingId = null;
+  document.getElementById("software-form").reset();
+  document.getElementById("form-title").textContent = "Új szoftver hozzáadása";
+  document.getElementById("cancel-btn").style.display = "none";
+}
+
+// Initial load
+loadSoftware();
+
+</script>
+
+</main>
+  <footer class="footer">
+    <p>Gyapjas Kornél (F6JJ4L)</p>
+    <p>Ember Richárd (MLY59O)</p>
+  </footer>
+</body>
+
+</html>
