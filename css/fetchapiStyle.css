@@ -1,0 +1,35 @@
+/* --- Fetch API oldal specifikus stílusok --- */
+
+#error-message {
+  color: red;
+  font-weight: bold;
+  display: none;
+}
+
+#cancel-btn {
+  display: none;
+}
+
+#loading {
+  display: none;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #ffc107;
+}
+
+/* Táblázat oszlopainak szélességei */
+.col-id {
+  width: 10%;
+}
+
+.col-name {
+  width: 35%;
+}
+
+.col-category {
+  width: 25%;
+}
+
+.col-actions {
+  width: 30%;
+}

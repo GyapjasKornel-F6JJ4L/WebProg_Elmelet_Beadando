@@ -1,0 +1,26 @@
+/* --- SPA (React) oldal specifikus stílusok --- */
+
+/* Az alkalmazás választó konténere */
+.spa-form {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* Navigációs menü a gombokhoz */
+.spa-nav {
+  display: block;
+  margin-bottom: 20px;
+  text-align: center;
+  gap: 10px;
+  word-spacing: 30px;
+  border-radius: 30px;
+}
+
+/* Az alkalmazást tartalmazó iframe kerete */
+.spa-iframe {
+  max-width: 100%;
+  width: 100%;
+  height: 500px;
+  border-radius: 20px;
+  border: none; /* iframe alap keret eltüntetése extraként */
+}

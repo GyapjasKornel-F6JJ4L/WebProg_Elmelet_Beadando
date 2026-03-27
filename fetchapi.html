@@ -6,22 +6,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Web alkalmazás</title>
   <link rel="stylesheet" href="css/indexStyle.css" />
+  <!-- Fő stíluslap az oldal megjelenéséhez -->
   <link rel="stylesheet" href="css/javascriptStyle.css" />
+  <!-- Stílusok a külső térközökhöz, űrlapokhoz -->
+  <link rel="stylesheet" href="css/fetchapiStyle.css" />
+  <!-- Külön stíluslap a Fetch API specifikus elemeihez -->
 </head>
 
 <body>
   <header class="header">
+    <!-- Navigációs fejléc reszponzív menüvel -->
     <div class="header-content">
       <h1>Web-programozás I Előadás Házi feladat</h1>
+      <!-- Főcím kiíratása -->
     </div>
-    <!-- Rejtett checkbox trükk a mobil menühöz (CSS-ből vezérelve) -->
-    <input type="checkbox" id="menu-toggle" class="checkbox" />
+    
+    <input type="checkbox" id="menu-toggle" />
+    <!-- Rejtett checkbox a mobil menü CSS vezérléséhez -->
     <label for="menu-toggle" class="hamburger">
+      <!-- Hamburger menü ikon mobil nézethez -->
       <span></span>
       <span></span>
       <span></span>
     </label>
+
     <nav class="header-menu">
+      <!-- Oldalak közötti navigációs menü -->
       <a href="index.html">Főoldal</a>
       <a href="javascript.html">JavaScript Menű</a>
       <a href="react.html">React menü</a>
@@ -32,172 +42,198 @@
     </nav>
   </header>
 
-<main>
-<h2>Szoftverleltár (Fetch API, MySQL Adatbázis)</h2>
+  <main>
+    <!-- Fő tartalom: Adatbázis szoftverleltár -->
+    <h2>Szoftverleltár (Fetch API, MySQL Adatbázis)</h2>
 
-<p id="error-message" style="color: red; font-weight: bold; display: none;"></p>
+    <p id="error-message"></p>
+    <!-- Üres bekezdés az esetleges hálózati hibaüzenetek megjelenítéséhez -->
 
-<div class="form-container">
-  <h3 id="form-title">Új szoftver hozzáadása</h3>
-  <form id="software-form">
-    <div class="form-group">
-      <label for="nev">Név / Szoftver:</label>
-      <input type="text" id="nev" required>
+    <div class="form-container">
+      <!-- Konténer az új adatok hozzáadásához / szerkesztéshez -->
+      <h3 id="form-title">Új szoftver hozzáadása</h3>
+      <form id="software-form">
+        <!-- Beküldendő adatűrlap -->
+        <div class="form-group">
+          <label for="nev">Név / Szoftver:</label>
+          <input type="text" id="nev" required>
+        </div>
+        <div class="form-group">
+          <label for="kategoria">Kategória:</label>
+          <input type="text" id="kategoria" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Mentés</button>
+        <button type="button" id="cancel-btn" class="btn btn-secondary">Mégse</button>
+      </form>
     </div>
-    <div class="form-group">
-      <label for="kategoria">Kategória:</label>
-      <input type="text" id="kategoria" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Mentés</button>
-    <button type="button" id="cancel-btn" class="btn btn-secondary" style="display:none;">Mégse</button>
-  </form>
-</div>
 
-<div id="loading" style="display: none;">Adatok töltése folyamatban...</div>
+    <div id="loading">Adatok töltése folyamatban...</div>
+    <!-- Vizuális viszajelzés szerverhívás közben -->
 
-<table>
-  <thead>
-    <tr>
-      <th style="width: 10%">ID</th>
-      <th style="width: 35%">Név</th>
-      <th style="width: 25%">Kategória</th>
-      <th style="width: 30%">Műveletek</th>
-    </tr>
-  </thead>
-  <tbody id="table-body">
-    <!-- Adatok ide kerülnek dinamikusan -->
-  </tbody>
-</table>
+    <table>
+      <!-- Táblázat a meglévő szoftverek listázására -->
+      <thead>
+        <tr>
+          <!-- Táblázat oszlopnevei beállított százalékos szélességgel -->
+          <th class="col-id">ID</th>
+          <th class="col-name">Név</th>
+          <th class="col-category">Kategória</th>
+          <th class="col-actions">Műveletek</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <!-- Adatok ide kerülnek dinamikusan (a JS tölti fel) -->
+      </tbody>
+    </table>
 
-<script>
-// Az éppen szerkesztett elem ID-ját tárolja
-let editingId = null;
+    <script>
+      // Az éppen szerkesztett elem ID-ját tárolja (null, ha újat adunk hozzá)
+      let editingId = null;
 
-// ================= READ =================
-function loadSoftware() {
-  const loading = document.getElementById("loading");
-  const errorMsg = document.getElementById("error-message");
-  
-  loading.style.display = "block";
-  errorMsg.style.display = "none";
+      // ================= READ (Adatok lekérése) =================
+      function loadSoftware() {
+        // Betöltés megkezdése, UI előkészítése
+        const loading = document.getElementById("loading");
+        const errorMsg = document.getElementById("error-message");
 
-  fetch("php/api.php")
-    .then(res => {
-      if (!res.ok) throw new Error('Hálózati hiba: ' + res.status);
-      return res.json();
-    })
-    .then(data => {
-      const tbody = document.getElementById("table-body");
-      tbody.innerHTML = "";
+        loading.style.display = "block";
+        errorMsg.style.display = "none";
 
-      if (data.length > 0) {
-        data.forEach(software => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
+        // Aszinkron kérés a szerver felé
+        fetch("php/api.php")
+          .then(res => {
+            if (!res.ok) throw new Error('Hálózati hiba: ' + res.status);
+            return res.json();
+          })
+          .then(data => {
+            // Táblázat ürítése és kapott adatok iterálása
+            const tbody = document.getElementById("table-body");
+            tbody.innerHTML = "";
+
+            if (data.length > 0) {
+              data.forEach(software => {
+                // Sor (tr) összeállítása cserélhető paraméterekkel
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
             <td>${software.id}</td>
             <td>${software.nev}</td>
             <td>${software.kategoria}</td>
             <td class="actions">
+              <!-- Műveleti gombok (Szerkesztés/Törlés) paraméteres függvényhívásokkal -->
               <button class="btn btn-warning" onclick="editSoftware(${software.id}, '${software.nev}', '${software.kategoria}')">Szerkesztés</button>
               <button class="btn btn-danger" onclick="deleteSoftware(${software.id})">Törlés</button>
             </td>
           `;
-          tbody.appendChild(tr);
-        });
-      } else {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Nincs elérhető adat az adatbázisban.</td></tr>';
+                tbody.appendChild(tr);
+              });
+            } else {
+              // Ha még nincs adat az adatbázisban
+              tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Nincs elérhető adat az adatbázisban.</td></tr>';
+            }
+          })
+          .catch(err => {
+            // Hiba esetén értesítés a felhasználónak
+            console.error('Hiba az adatok betöltésekor:', err);
+            errorMsg.textContent = 'Hiba történt az adatok betöltésekor: ' + err.message;
+            errorMsg.style.display = "block";
+          })
+          .finally(() => {
+            // Töltés szimbólum eltüntetése a folyamat végén
+            loading.style.display = "none";
+          });
       }
-    })
-    .catch(err => {
-      console.error('Hiba az adatok betöltésekor:', err);
-      errorMsg.textContent = 'Hiba történt az adatok betöltésekor: ' + err.message;
-      errorMsg.style.display = "block";
-    })
-    .finally(() => {
-      loading.style.display = "none";
-    });
-}
 
-// ================= CREATE / UPDATE =================
-document.getElementById("software-form").addEventListener("submit", function(e) {
-  e.preventDefault();
+      // ================= CREATE / UPDATE (Mentés / Frissítés) =================
+      document.getElementById("software-form").addEventListener("submit", function (e) {
+        // Alapértelmezett HTML form küldés (oldal újrafrissítésének) megakadályozása
+        e.preventDefault();
 
-  const nev = document.getElementById("nev").value;
-  const kategoria = document.getElementById("kategoria").value;
+        // Űrlap adatok kinyerése
+        const nev = document.getElementById("nev").value;
+        const kategoria = document.getElementById("kategoria").value;
 
-  if (!nev || !kategoria) { 
-    alert('Kérjük töltsön ki minden kötelező mezőt!');
-    return;
-  }
+        if (!nev || !kategoria) {
+          alert('Kérjük töltsön ki minden kötelező mezőt!');
+          return;
+        }
 
-  const data = editingId ? { id: editingId, nev, kategoria } : { nev, kategoria };
-  const method = editingId ? "PUT" : "POST";
+        // JS objektum összeállítása POST (új adat) vagy PUT (szerkesztés) elvárásokhoz
+        const data = editingId ? { id: editingId, nev, kategoria } : { nev, kategoria };
+        const method = editingId ? "PUT" : "POST";
 
-  fetch("php/api.php", {
-    method: method,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  })
-  .then(res => {
-    if (!res.ok) throw new Error('Hálózati hiba: ' + res.status);
-    return res.json();
-  })
-  .then(() => {
-    resetForm();
-    loadSoftware();
-  })
-  .catch(err => {
-    console.error('Hiba a mentés során:', err);
-    alert('Hiba történt az adatmentés során!');
-  });
-});
+        // JSON küldése a megfelelő REST metódussal a szervernek
+        fetch("php/api.php", {
+          method: method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+          .then(res => {
+            if (!res.ok) throw new Error('Hálózati hiba: ' + res.status);
+            return res.json();
+          })
+          .then(() => {
+            // Sikeres mentés után űrlap ürítése, majd táblázat lekérése
+            resetForm();
+            loadSoftware();
+          })
+          .catch(err => {
+            console.error('Hiba a mentés során:', err);
+            alert('Hiba történt az adatmentés során!');
+          });
+      });
 
-// ================= DELETE =================
-function deleteSoftware(id) {
-  if (window.confirm(`Biztosan törölni szeretné a(z) ${id} azonosítójú szoftvert?`)) {
-    fetch(`php/api.php?id=${id}`, { method: "DELETE" })
-    .then(res => {
-      if (!res.ok) throw new Error('Hálózati hiba: ' + res.status);
-      return res.json();
-    })
-    .then(() => loadSoftware())
-    .catch(err => {
-      console.error('Hiba a törlés során:', err);
-      alert('Hiba történt a törlés során!');
-    });
-  }
-}
+      // ================= DELETE (Törlés) =================
+      function deleteSoftware(id) {
+        // Megerősítő ablak kérése felhasználótól
+        if (window.confirm(`Biztosan törölni szeretné a(z) ${id} azonosítójú szoftvert?`)) {
+          // Törlés metódus hívása URL azonosító paraméterrel
+          fetch(`php/api.php?id=${id}`, { method: "DELETE" })
+            .then(res => {
+              if (!res.ok) throw new Error('Hálózati hiba: ' + res.status);
+              return res.json();
+            })
+            .then(() => loadSoftware()) // Frissíteni a UI-t az elem eltűnése végett
+            .catch(err => {
+              console.error('Hiba a törlés során:', err);
+              alert('Hiba történt a törlés során!');
+            });
+        }
+      }
 
-// ================= EDIT =================
-function editSoftware(id, nev, kategoria) {
-  editingId = id;
-  document.getElementById("nev").value = nev;
-  document.getElementById("kategoria").value = kategoria;
-  
-  document.getElementById("form-title").textContent = `Szoftver szerkesztése (ID: ${id})`; 
-  document.getElementById("cancel-btn").style.display = "inline-block"; 
-  
-  // UX extra: odagörget a form-hoz
-  window.scrollTo({ top: 0, behavior: 'smooth' }); 
-}
+      // ================= EDIT (Szerkesztés előkészítés) =================
+      function editSoftware(id, nev, kategoria) {
+        // Meglévő értékek betöltése a beviteli űrlapba
+        editingId = id;
+        document.getElementById("nev").value = nev;
+        document.getElementById("kategoria").value = kategoria;
 
-// ================= CANCEL =================
-document.getElementById("cancel-btn").addEventListener("click", resetForm);
+        // Form állapotának vizuális cseréje és a "Mégse" gomb megjelenítése
+        document.getElementById("form-title").textContent = `Szoftver szerkesztése (ID: ${id})`;
+        document.getElementById("cancel-btn").style.display = "inline-block";
 
-function resetForm() {
-  editingId = null;
-  document.getElementById("software-form").reset();
-  document.getElementById("form-title").textContent = "Új szoftver hozzáadása";
-  document.getElementById("cancel-btn").style.display = "none";
-}
+        // UX javítás: automatikus felgörgetés az űrlap tetejéhez
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
 
-// Initial load
-loadSoftware();
+      // ================= CANCEL (Szerkesztés megszakítása) =================
+      document.getElementById("cancel-btn").addEventListener("click", resetForm);
 
-</script>
+      function resetForm() {
+        // Váltás "Új felvétel" módba (id eldobása) és form mezők ürítése
+        editingId = null;
+        document.getElementById("software-form").reset();
+        document.getElementById("form-title").textContent = "Új szoftver hozzáadása";
+        document.getElementById("cancel-btn").style.display = "none";
+      }
 
-</main>
+      // Alkalmazás indulásakor legelső betöltés futtatása
+      loadSoftware();
+
+    </script>
+
+  </main>
   <footer class="footer">
+    <!-- Oldal lábléc fejlesztők neveivel -->
     <p>Gyapjas Kornél (F6JJ4L)</p>
     <p>Ember Richárd (MLY59O)</p>
   </footer>

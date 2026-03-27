@@ -8,6 +8,8 @@
     <!-- Fő stíluslap az oldal megjelenéséhez -->
     <link rel="stylesheet" href="css/javascriptStyle.css" />
     <!-- Specifikus stílusok az űrlap elemekhez -->
+    <link rel="stylesheet" href="css/spaStyle.css" />
+    <!-- Külön stíluslap a React SPA oldal számára -->
   </head>
 
   <body>
@@ -16,7 +18,7 @@
       <div class="header-content">
         <h1>Web-programozás I Előadás Házi feladat</h1>
       </div>
-      <input type="checkbox" id="menu-toggle" class="checkbox" />
+      <input type="checkbox" id="menu-toggle" />
       <label for="menu-toggle" class="hamburger">
         <!-- Hamburger menü ikon mobil nézethez -->
         <span></span>
@@ -39,11 +41,10 @@
       <!-- Fő tartalom terület a React alkalmazások számára -->
       <h2>React SPA Mini Projektek</h2>
 
-      <div class="form-container" style="max-width: 900px; margin: auto;">
+      <div class="form-container spa-form">
         <!-- Konténer az alkalmazás választó elemekhez -->
         <h3>Alkalmazások kiválasztása</h3>
-        <nav style="display: block; margin-bottom: 20px; text-align: center;
-        gap: 10px; word-spacing: 30px; border-radius: 30px;">
+        <nav class="spa-nav">
           <!-- Alkalmazás választó gombok navigációja -->
           <button onclick="loadApp('rock')" class="btn btn-primary">
             Kő–Papír–Olló
@@ -54,7 +55,7 @@
         </nav>
         <br>
 
-        <iframe id="appFrame" title="React App" style="max-width: 100%; width: 100%; height: 500px; border-radius: 20px;"></iframe>
+        <iframe id="appFrame" class="spa-iframe" title="React App"></iframe>
         <!-- React alkalmazások megjelenítése iframe-ben -->
       </div>
     </main>
