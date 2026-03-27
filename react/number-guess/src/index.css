@@ -41,17 +41,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Remove spinner buttons from number input */
-.game input[type="number"]::-webkit-outer-spin-button,
-.game input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.game input[type="number"] {
-  -moz-appearance: textfield;
-}
-
 .game button {
   width: 100%;
   height: 42px;
