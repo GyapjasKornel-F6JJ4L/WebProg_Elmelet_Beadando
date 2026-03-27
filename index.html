@@ -1,39 +1,99 @@
 <!doctype html>
 <html lang="hu">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web alkalmazás</title>
+    <link rel="stylesheet" href="css/indexStyle.css" />
+    <!-- Fő stíluslap az oldal megjelenéséhez -->
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Web alkalmazás</title>
-  <link rel="stylesheet" href="css/indexStyle.css" />
-</head>
+  <body>
+    <header class="header">
+      <!-- Navigációs fejléc reszponzív menüvel -->
+      <div class="header-content">
+        <h1>Web-programozás I Előadás Házi feladat</h1>
+        <!-- Főcím kiíratása -->
+      </div>
+      
+      <input type="checkbox" id="menu-toggle" />
+      <!-- Rejtett checkbox a mobil menü CSS vezérléséhez -->
+      <label for="menu-toggle" class="hamburger">
+        <!-- Hamburger menü ikon mobil nézethez -->
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
 
-<body>
-  <header class="header">
-    <div class="header-content">
-      <h1>Web-programozás I Előadás Házi feladat</h1>
-    </div>
-    <input type="checkbox" id="menu-toggle" class="checkbox" />
-    <label for="menu-toggle" class="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </label>
-    <nav class="header-menu">
-      <a href="index.html">Főoldal</a>
-      <a href="javascript.html">JavaScript Menű</a>
-      <a href="react.html">React menü</a>
-      <a href="spa.html">SPA menü</a>
-      <a href="fetchapi.html">Fetch API menü</a>
-      <a href="axios.html">Axios menü</a>
-      <a href="oojs.html">OOJS menü</a>
-    </nav>
-  </header>
-  BODY
-  <footer class="footer">
-    <p>Gyapjas Kornél (F6JJ4L)</p>
-    <p>Ember Richárd (MLY59O)</p>
-  </footer>
-</body>
+      <nav class="header-menu">
+        <!-- Oldalak közötti navigációs menü -->
+        <a href="index.html">Főoldal</a>
+        <a href="javascript.html">JavaScript Menű</a>
+        <a href="react.html">React menü</a>
+        <a href="spa.html">SPA menü</a>
+        <a href="fetchapi.html">Fetch API menü</a>
+        <a href="axios.html">Axios menü</a>
+        <a href="oojs.html">OOJS menü</a>
+      </nav>
+    </header>
 
+    <main class="hero-section">
+      <!-- Látványos bemutatkozó felület (Hero section) a kártyákkal -->
+      <h2 class="hero-title">Üdvözlünk a Web-programozás I. beadandóban!</h2>
+      <p class="hero-subtitle">
+        Ez az alkalmazás a félév során tanult modern webes technológiákat mutatja be. A navigációs menü segítségével vagy az alábbi kártyákra kattintva böngészhetsz a különböző megoldásokat alkalmazó feladatok között, a natív JavaScripttől kezdve a React bemutatásán át a REST API hívásokig.
+      </p>
+
+      <div class="features-grid">
+        <!-- Reszponzív HTML hálózatos (grid) formátum a kártyák elrendezésére -->
+        <div class="feature-card">
+          <!-- Első bemutató kártya -->
+          <h3>JavaScript</h3>
+          <p>Alapvető JavaScript algoritmusok, DOM manipuláció és eseménykezelés bemutatása interaktív feladatokon keresztül.</p>
+          <a href="javascript.html">Tovább a feladathoz</a>
+        </div>
+
+        <div class="feature-card">
+          <!-- Második bemutató kártya -->
+          <h3>React</h3>
+          <p>Modern komponens-alapú webfejlesztés React könyvtárral. Állapotkezelés (state) és dinamikus renderelés demója.</p>
+          <a href="react.html">Tovább a feladathoz</a>
+        </div>
+
+        <div class="feature-card">
+          <!-- Harmadik bemutató kártya -->
+          <h3>SPA (Egyoldalas app)</h3>
+          <p>Single Page Application koncepció, ahol az oldal újratöltés nélkül, dinamikusan cseréli a tartalmat aszinkron adatokból.</p>
+          <a href="spa.html">Tovább a feladathoz</a>
+        </div>
+
+        <div class="feature-card">
+          <!-- Negyedik bemutató kártya -->
+          <h3>Fetch API</h3>
+          <p>Aszinkron HTTP adatbázis hívások (GET, POST, PUT, DELETE) megvalósítása a beépített, natív Fetch API használatával.</p>
+          <a href="fetchapi.html">Tovább a feladathoz</a>
+        </div>
+
+        <div class="feature-card">
+          <!-- Ötödik bemutató kártya -->
+          <h3>Axios</h3>
+          <p>A népszerű Axios JavaScript könyvtár használata szerverhívásokhoz. Könnyebb hibakezelés és JSON transzformáció.</p>
+          <a href="axios.html">Tovább a feladathoz</a>
+        </div>
+
+        <div class="feature-card">
+          <!-- Hatodik bemutató kártya -->
+          <h3>OOJS (Obj. Orientált JS)</h3>
+          <p>Objektumorientált alapelvek, Class-ok, öröklődés bemutatása egy jól strukturált grafikus számológép példáján keresztül.</p>
+          <a href="oojs.html">Tovább a feladathoz</a>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <!-- Oldal lábléc fejlesztők neveivel -->
+      <p>Gyapjas Kornél (F6JJ4L)</p>
+      <p>Ember Richárd (MLY59O)</p>
+    </footer>
+  </body>
 </html>

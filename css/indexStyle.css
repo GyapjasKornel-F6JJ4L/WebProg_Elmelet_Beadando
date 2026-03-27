@@ -117,6 +117,92 @@ body {
   font-size: 1.5vw;
 }
 
+/* --- Főoldal (index.html) látványos elemei --- */
+.hero-section {
+  flex-grow: 1; /* Kitölti a maradék helyet a header és footer között */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4vh 2vw;
+  color: #fff;
+  text-align: center;
+}
+
+.hero-title {
+  font-size: 2.5vw;
+  font-weight: bold;
+  margin-bottom: 2vh;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+  color: #fff;
+}
+
+.hero-subtitle {
+  font-size: 1.2vw;
+  max-width: 60vw;
+  margin-bottom: 5vh;
+  line-height: 1.6;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  width: 100%;
+  max-width: 1200px;
+  padding-bottom: 5vh;
+}
+
+.feature-card {
+  background-color: #3d3d3d; /* javascriptStyle.css panel színe */
+  border: 1px solid #555;
+  border-radius: 8px; /* javascriptStyle.css stílusa */
+  padding: 25px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+  background-color: #4a4a4a; /* javascriptStyle.css tr:hover színe */
+}
+
+.feature-card h3 {
+  color: #fff; /* javascriptStyle.css header színe */
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.feature-card p {
+  flex-grow: 1;
+  font-size: 1rem;
+  color: #f0f0f0; /* javascriptStyle.css normál szöveg színe */
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.feature-card a {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #007bff; /* javascriptStyle.css .btn-primary színe */
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.feature-card a:hover {
+  background-color: #0056b3; /* javascriptStyle.css .btn-primary:hover színe */
+  transform: scale(1.05);
+}
+
 /* Mobil reszponzív */
 @media (max-width: 768px) {
   .header {
@@ -159,5 +245,16 @@ body {
   /* Elválasztó vonalak eltüntetése mobilon */
   .header-menu a:not(:last-child)::after {
     display: none;
+  }
+
+  /* Mobil nézet hero feliratai */
+  .hero-title {
+    font-size: 6vw;
+    margin-top: 10px;
+  }
+
+  .hero-subtitle {
+    font-size: 3.5vw;
+    max-width: 90vw;
   }
 }
